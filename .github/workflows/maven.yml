@@ -1,4 +1,4 @@
-name: CI/CD for TodoList
+name: CI/CD for E&TMotors
 
 on:
   push:

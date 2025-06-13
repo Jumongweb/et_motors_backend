@@ -9,7 +9,7 @@ WORKDIR /app
 COPY --from=build target/*.jar et_motors.jar
 EXPOSE 2626
 
-ENTRYPOINT ["java", "-jar", "-Dserver.port=2626", "todolist.jar"]
+ENTRYPOINT ["java", "-jar", "-Dserver.port=2626", "et_motors.jar"]
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
   CMD curl -f http://localhost:2626/actuator/health || exit 1
