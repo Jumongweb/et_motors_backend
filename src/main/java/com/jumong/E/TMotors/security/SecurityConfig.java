@@ -39,6 +39,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
+                        .requestMatchers("https://et-motors-backend.onrender.com/api/auth/register",
+                                "https://et-motors-backend.onrender.com/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/cars/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/cars/**").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/cars/**").authenticated()
