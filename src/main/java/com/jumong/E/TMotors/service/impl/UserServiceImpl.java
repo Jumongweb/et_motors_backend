@@ -97,6 +97,7 @@ public class UserServiceImpl implements UserService {
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setMessage("Login successful");
         loginResponse.setToken(token);
+        log.info("Login successful, token: {}", loginResponse.getToken());
         return loginResponse;
     }
 
