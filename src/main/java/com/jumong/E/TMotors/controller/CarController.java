@@ -78,7 +78,7 @@ public class CarController {
         carRequest.setImages(images);
 
         String actorEmail = principal.getName();
-        log.info("-------> email: {}", email);
+        log.info("-------> email: {}", actorEmail);
         return new ResponseEntity<>(carService.addCar(carRequest, actorEmail), HttpStatus.CREATED);
     }
 
