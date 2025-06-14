@@ -22,7 +22,6 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/cars")
-@CrossOrigin(origins = "*")
 @Slf4j
 public class CarController {
 
