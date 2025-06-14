@@ -10,7 +10,9 @@ import com.jumong.E.TMotors.model.*;
 import com.jumong.E.TMotors.repository.CarRepository;
 import com.jumong.E.TMotors.service.CloudinaryService;
 import com.jumong.E.TMotors.service.interfac.CarService;
+import com.jumong.E.TMotors.service.interfac.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,11 +23,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CarServiceImpl implements CarService {
 
     private final CarRepository carRepository;
     private final CarMapper carMapper;
     private final CloudinaryService cloudinaryService;
+    private final UserService userService;
 
     public List<CarResponse> getAllCars() {
         List<Car> cars = carRepository.findAll();
@@ -38,7 +42,9 @@ public class CarServiceImpl implements CarService {
         return carMapper.toCarResponse(car);
     }
 
-    public CarResponse addCar(CarRequest carRequest) throws IOException {
+    public CarResponse addCar(CarRequest carRequest, String actorEmail) throws IOException {
+        User user = userService.findByEmail(actorEmail);
+        log.info("------> logged in user ---> {}", user);
         List<MultipartFile> images = carRequest.getImages();
         images.forEach(this::validateFile);
 
@@ -51,6 +57,7 @@ public class CarServiceImpl implements CarService {
         }
         Car car = carMapper.toCarEntity(carRequest);
         car.setImages(imageUrls);
+        car.setUser(user);
         Car savedCar = carRepository.save(car);
         return carMapper.toCarResponse(savedCar);
     }

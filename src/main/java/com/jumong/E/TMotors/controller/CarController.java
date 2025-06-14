@@ -8,6 +8,7 @@ import com.jumong.E.TMotors.model.*;
 import com.jumong.E.TMotors.service.interfac.CarService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +16,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/cars")
 @CrossOrigin(origins = "*")
+@Slf4j
 public class CarController {
 
     private final CarService carService;
@@ -53,7 +56,8 @@ public class CarController {
             @RequestParam(required = false, defaultValue = "true") Boolean isAvailable,
             @RequestParam String description,
             @RequestParam String features,
-            @RequestParam(required = false) List<MultipartFile> images) throws IOException {
+            @RequestParam(required = false) List<MultipartFile> images,
+            Principal principal) throws IOException {
         CarRequest carRequest = new CarRequest();
         carRequest.setName(name);
         carRequest.setMake(make);
@@ -72,7 +76,10 @@ public class CarController {
         carRequest.setDescription(description);
         carRequest.setFeatures(features);
         carRequest.setImages(images);
-        return new ResponseEntity<>(carService.addCar(carRequest), HttpStatus.CREATED);
+
+        String actorEmail = principal.getName();
+        log.info("-------> email: {}", email);
+        return new ResponseEntity<>(carService.addCar(carRequest, actorEmail), HttpStatus.CREATED);
     }
 
     @GetMapping("/search")

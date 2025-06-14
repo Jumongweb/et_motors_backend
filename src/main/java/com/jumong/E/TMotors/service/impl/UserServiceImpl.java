@@ -34,8 +34,6 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toUserEntity(registerRequest);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User savedUser = userRepository.save(user);
-
-
         return userMapper.toUserResponse(savedUser);
     }
 
@@ -99,7 +97,13 @@ public class UserServiceImpl implements UserService {
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setMessage("Login successful");
         loginResponse.setToken(token);
+        log.info("Login successful, token: {}", loginResponse.getToken());
         return loginResponse;
+    }
+
+    @Override
+    public User findByEmail(String actorEmail) {
+        return userRepository.findUserByEmail(actorEmail);
     }
 
     private void validateLoginRequest(LoginRequest loginRequest) {

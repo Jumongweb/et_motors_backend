@@ -1,18 +1,15 @@
 package com.jumong.E.TMotors.service.impl;
 
-import com.jumong.E.TMotors.dto.response.LoginResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Date;
