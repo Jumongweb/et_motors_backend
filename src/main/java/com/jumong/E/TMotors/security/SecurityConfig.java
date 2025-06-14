@@ -39,15 +39,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
-                        .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/cars/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/cars/**").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/api/cars/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/cars/**").authenticated()
-
                                 .anyRequest().authenticated())
-                .formLogin(Customizer.withDefaults())
-                .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
