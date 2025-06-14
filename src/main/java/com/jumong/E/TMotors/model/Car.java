@@ -67,5 +67,9 @@ public class Car {
 
     private String features;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
 }
 

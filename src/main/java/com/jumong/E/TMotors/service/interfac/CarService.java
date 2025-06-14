@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface CarService {
 
-    CarResponse addCar(CarRequest carRequest) throws IOException;
+    CarResponse addCar(CarRequest carRequest, String actorEmail) throws IOException;
 
     List<CarResponse> getAllCars();
 

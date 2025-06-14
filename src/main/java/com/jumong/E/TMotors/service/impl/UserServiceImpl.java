@@ -101,6 +101,11 @@ public class UserServiceImpl implements UserService {
         return loginResponse;
     }
 
+    @Override
+    public User findByEmail(String actorEmail) {
+        return userRepository.findUserByEmail(actorEmail);
+    }
+
     private void validateLoginRequest(LoginRequest loginRequest) {
         if (loginRequest == null){
             log.info("LoginRequest is null");
