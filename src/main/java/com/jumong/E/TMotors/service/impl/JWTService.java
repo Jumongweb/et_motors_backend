@@ -8,30 +8,29 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import org.springframework.beans.factory.annotation.Value;
 
 @Service
 @Slf4j
 public class JWTService {
 
-    private String secretKey = "";
+    @Value("${jwt.secret}")
+    private String secretKey;
 
-    public JWTService() {
-        try {
-            KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
-            SecretKey sk = keyGenerator.generateKey();
-            secretKey = Base64.getEncoder().encodeToString(sk.getEncoded());
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    public JWTService() {
+//        try {
+//            KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
+//            SecretKey sk = keyGenerator.generateKey();
+//            secretKey = Base64.getEncoder().encodeToString(sk.getEncoded());
+//        } catch (NoSuchAlgorithmException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     long thirtyMinutesInMillis = 30 * 60 * 1000L;
     Date expiryDate = new Date(System.currentTimeMillis() + thirtyMinutesInMillis);
@@ -73,11 +72,18 @@ public class JWTService {
 
     public boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        boolean isValid = (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        log.info("Token validation for {}: {}", username, isValid ? "VALID" : "INVALID");
+        return isValid;
     }
 
     private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        Date expiration = extractExpiration(token);
+        boolean expired = expiration.before(new Date());
+        if (expired) {
+            log.warn("Token expired at {}", expiration);
+        }
+        return expired;
     }
 
     private Date extractExpiration(String token) {
